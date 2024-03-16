@@ -5,7 +5,7 @@ const WorkoutForm = () => {
   const { dispatch } = useWorkoutsContext()
 
   const [title, setTitle] = useState('')
-  const [load, setLoad] = useState('')
+  const [loads, setLoad] = useState('')
   const [reps, setReps] = useState('')
   const [error, setError] = useState(null)
   const [emptyFields, setEmptyFields] = useState([])
@@ -13,7 +13,7 @@ const WorkoutForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    const workout = {title, load, reps}
+    const workout = {title, loads, reps}
 
     const response = await fetch('/api/workouts', {
       method: 'POST',
@@ -51,12 +51,12 @@ const WorkoutForm = () => {
         className={emptyFields.includes('title') ? 'error' : ''}
       />
 
-      <label>Load (in kg):</label>
+      <label>Loads (in kg):</label>
       <input 
         type="number"
         onChange={(e) => setLoad(e.target.value)}
-        value={load}
-        className={emptyFields.includes('load') ? 'error' : ''}
+        value={loads}
+        className={emptyFields.includes('loads') ? 'error' : ''}
       />
 
       <label>Reps:</label>

@@ -81,12 +81,12 @@ const insertData = async (Data) => {
         pool = await database_connection();
         pool.setMaxListeners(15);
         const request = pool.request();
-        const query = `INSERT INTO workout([Id], [title], [reps], [loads]) VALUES (@Id, @title, @reps, @loads)`;
+        const query = `INSERT INTO workout([title], [reps], [loads],[createdAt]) VALUES (@title, @reps, @loads, @createdAt)`;
         request
-            .input('Id', sql.Int, Data.Id)
             .input('title', sql.NVarChar(255), Data.title)
             .input('reps', sql.Int, Data.reps)
-            .input('loads', sql.Int, Data.loads);
+            .input('loads', sql.Int, Data.loads)
+            .input('createdAt', sql.DateTime, Data.createdAt);
         const result = await request.query(query);
         return result.rowsAffected[0] > 0;
     } catch (error) {

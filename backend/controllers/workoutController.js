@@ -29,36 +29,37 @@ const getWorkout = async (req, res) => {
 
 // create new workout
 const createWorkout = async (req, res) => {
-  const {title, loads, reps} = req.body
+  const { title, loads, reps } = req.body;
 
-  let emptyFields = {
-      Id:1,
-      title:'',
-      reps:0,
-      loads:0
-  }
+  const missingFields = [];
+  
+  // Check for missing fields
+  if (!title) missingFields.push('title');
+  if (!loads) missingFields.push('loads');
+  if (!reps) missingFields.push('reps');
 
-  if(!title) {
-    emptyFields.title = title
-  }
-  if(!loads) {
-    emptyFields.loads=loads
-  }
-  if(!reps) {
-    emptyFields.reps = reps
-  }
-  if(emptyFields.length > 0) {
-    return res.status(400).json({ error: 'Please fill in all the fields', emptyFields })
+  if (missingFields.length > 0) {
+    return res.status(400).json({ error: 'Please fill in all the fields', missingFields });
   }
 
-  // add doc to db
   try {
-    const workout = await insertData(emptyFields)
-    res.status(200).json(workout)
+    // Create the workout by inserting data into the database
+    const workoutData = {
+      title,
+      loads,
+      reps,
+      createdAt: new Date()
+    };
+
+    const workout = await insertData(workoutData);
+    
+    // Respond with the created workout
+    res.status(201).json(workout);
   } catch (error) {
-    res.status(400).json({error: error.message})
+    // Handle database errors
+    res.status(500).json({ error: 'Internal Server Error' });
   }
-}
+};
 
 // delete a workout
 const deleteWorkout = async (req, res) => {
